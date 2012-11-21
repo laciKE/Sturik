@@ -1,8 +1,8 @@
 package sk.estesadohodneme.sturik.game;
 
-import java.util.ArrayList;
 import java.util.Queue;
 import java.util.Random;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class GameSnake extends Game {
 
@@ -187,6 +187,7 @@ public class GameSnake extends Game {
 		mIsFinished = false;
 		mKilledSnakes = 0;
 		mShowScore = 0;
+		mSnake = new LinkedBlockingQueue<Integer>();
 		clearBoard();
 		boardAddFood();
 		newSnake();
