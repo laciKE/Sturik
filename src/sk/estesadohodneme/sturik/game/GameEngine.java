@@ -81,7 +81,7 @@ public class GameEngine implements Runnable, Serializable {
 
 			switch (gameType) {
 			case GAME_SNAKE:
-				// mGame = new GameSnake();
+				mGame = new GameSnake();
 				break;
 			case GAME_TETRIS:
 				// mGame = new GameTetris();
@@ -199,10 +199,9 @@ public class GameEngine implements Runnable, Serializable {
 			mGameLock.lock();
 			mImageGeneratorLock.lock();
 			try {
-				if ((mRunning) /*
-								 * || (mGame == null) || (mImageGenerator ==
-								 * null)
-								 */) {
+				if ((mRunning) || (mGame == null) /*
+												 * || (mImageGenerator == null)
+												 */) {
 					return false;
 				}
 			} finally {
@@ -254,7 +253,7 @@ public class GameEngine implements Runnable, Serializable {
 					Log.d("STURIK", "up");
 				if (mUserAction.isActionDown())
 					Log.d("STURIK", "down");
-				// mGame.doStep(mUserAction);
+				mGame.doStep(mUserAction);
 				mUserAction.clear();
 			} finally {
 				mGameLock.unlock();

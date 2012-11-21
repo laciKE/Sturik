@@ -8,7 +8,7 @@ public abstract class Game {
 	/**
 	 * 
 	 * @param userAction defines user action
-	 * @return ArrayList<Short> with description of game board.
+	 * @return short[][] with description of game board.
 	 */
 	public abstract short[][] doStep(UserAction userAction);
 	public abstract boolean isFinished();
