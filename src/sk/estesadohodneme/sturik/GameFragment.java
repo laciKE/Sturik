@@ -1,7 +1,11 @@
 package sk.estesadohodneme.sturik;
 
 import sk.estesadohodneme.sturik.game.GameEngine;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +13,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 
 /**
  * Creates fragment for game.
@@ -16,12 +21,15 @@ import android.widget.ImageButton;
 public class GameFragment extends Fragment {
 
 	public static final String GAME_ENGINE = "game engine";
-	
+
 	private GameEngine mGameEngine = null;
-	
+	private Handler mHandler = new Handler();
+	private Runnable mUpdateGameBoard;
+	private View mView;
+
 	@Override
-	public void setArguments(Bundle args){
-		mGameEngine = (GameEngine)args.getSerializable(GAME_ENGINE);
+	public void setArguments(Bundle args) {
+		mGameEngine = (GameEngine) args.getSerializable(GAME_ENGINE);
 	}
 
 	/**
@@ -30,7 +38,7 @@ public class GameFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.game, container, false);
+		mView = inflater.inflate(R.layout.game, container, false);
 
 		int[][] actions = { { R.id.button_left, GameEngine.ACTION_LEFT },
 				{ R.id.button_right, GameEngine.ACTION_RIGHT },
@@ -39,7 +47,7 @@ public class GameFragment extends Fragment {
 		for (int[] action : actions) {
 			int buttonId = action[0];
 			final int userAction = action[1];
-			ImageButton button = (ImageButton) view.findViewById(buttonId);
+			ImageButton button = (ImageButton) mView.findViewById(buttonId);
 			button.setOnClickListener(new OnClickListener() {
 
 				@Override
@@ -49,27 +57,43 @@ public class GameFragment extends Fragment {
 			});
 
 		}
-			
-		return view;
+
+		mUpdateGameBoard = new Runnable() {
+
+			@SuppressWarnings("deprecation")
+			@Override
+			public void run() {
+				RelativeLayout gameBoard = (RelativeLayout) mView
+						.findViewById(R.id.game_board);
+				Bitmap bitmap = mGameEngine.getGameBoard();
+				Drawable background = new BitmapDrawable(getResources(), bitmap);
+				gameBoard.setBackgroundDrawable(background);
+				
+				mHandler.postDelayed(mUpdateGameBoard, mGameEngine.getDelay());
+			}
+		};
+		
+		return mView;
 	}
 
 	/**
 	 * Starts game on resume.
 	 */
 	@Override
-	public void onResume(){
+	public void onResume() {
 		super.onResume();
 		mGameEngine.start();
+		mHandler.postDelayed(mUpdateGameBoard, mGameEngine.getDelay() / 2);
 		Log.d("STURIK", "GameFragment start");
 	}
 
-	
 	/**
 	 * Stops game on pause.
 	 */
 	@Override
-	public void onPause(){
+	public void onPause() {
 		Log.d("STURIK", "GameFragment stop");
+		mHandler.removeCallbacks(mUpdateGameBoard);
 		mGameEngine.stop();
 		super.onPause();
 	}

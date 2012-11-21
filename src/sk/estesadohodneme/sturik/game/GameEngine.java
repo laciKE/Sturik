@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 /**
@@ -44,6 +45,7 @@ public class GameEngine implements Runnable, Serializable {
 	private volatile UserAction mUserAction = null;
 	private volatile Game mGame = null;
 	private volatile ImageGenerator mImageGenerator = null;
+	private volatile Bitmap mGameBoard = null;
 	private int mImageWidth = 0, mImageHeight = 0;
 	private volatile Boolean mRunning = false;
 	private volatile Integer mDelayInMiliseconds = 1000;
@@ -52,6 +54,7 @@ public class GameEngine implements Runnable, Serializable {
 	 * Locks for synchronized access to shared fields.
 	 */
 	private final Lock mGameLock = new ReentrantLock();
+	private final Lock mGameBoardLock = new ReentrantLock();
 	private final Lock mUserActionLock = new ReentrantLock();
 	private final Lock mImageGeneratorLock = new ReentrantLock();
 
@@ -189,6 +192,36 @@ public class GameEngine implements Runnable, Serializable {
 	}
 
 	/**
+	 * Returns delay between game steps.
+	 * 
+	 * @return delay between game steps in miliseconds
+	 */
+	public int getDelay() {
+		synchronized (mDelayInMiliseconds) {
+			return mDelayInMiliseconds;
+		}
+	}
+
+	/**
+	 * Returns game board's bitmap.
+	 * 
+	 * @return copy of internal game board
+	 */
+	public Bitmap getGameBoard() {
+		mGameBoardLock.lock();
+		Bitmap bitmap = null;
+		try {
+			bitmap = mGameBoard.copy(mGameBoard.getConfig(), false);
+		} catch (NullPointerException e) {
+			// mGameBoardLock is not set
+		} finally {
+			mGameBoardLock.unlock();
+		}
+
+		return bitmap;
+	}
+
+	/**
 	 * Starts the game in new {@link Thread}.
 	 * 
 	 * @return if game starts, return true, false otherwise.
@@ -240,6 +273,7 @@ public class GameEngine implements Runnable, Serializable {
 			running = mRunning;
 		}
 		int counter = 0;
+		short[][] rawGameBoard;
 		while (running) {
 			Log.d("STURIK", "running " + (counter++));
 			mUserActionLock.lock();
@@ -253,16 +287,18 @@ public class GameEngine implements Runnable, Serializable {
 					Log.d("STURIK", "up");
 				if (mUserAction.isActionDown())
 					Log.d("STURIK", "down");
-				mGame.doStep(mUserAction);
+				rawGameBoard = mGame.doStep(mUserAction);
 				mUserAction.clear();
 			} finally {
 				mGameLock.unlock();
 				mUserActionLock.unlock();
 			}
 			mImageGeneratorLock.lock();
+			mGameBoardLock.lock();
 			try {
-				// mImageGenerator.generate();
+				// mGameBoard = mImageGenerator.generate(rawGameBoard);
 			} finally {
+				mGameBoardLock.unlock();
 				mImageGeneratorLock.unlock();
 			}
 			int delayInMiliseconds;

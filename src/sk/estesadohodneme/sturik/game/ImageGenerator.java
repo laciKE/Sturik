@@ -1,10 +1,11 @@
 package sk.estesadohodneme.sturik.game;
 
+import android.graphics.Bitmap;
+
 /**
  * Parent of various image generator types.
  */
 public abstract class ImageGenerator {
-
 	/**
 	 * Sets size of generated image.
 	 * @param width
@@ -27,6 +28,5 @@ public abstract class ImageGenerator {
 	 * @param gameBoard returned by {@link Game}.doStep()
 	 * @return
 	 */
-	// TODO use suitable Image type for both Android and Swing.
-	// public abstract Image generate(short[][] gameBoard);
+	public abstract Bitmap generate(short[][] gameBoard);
 }
