@@ -48,7 +48,7 @@ public class GameEngine implements Runnable, Serializable {
 	private volatile Bitmap mGameBoard = null;
 	private int mImageWidth = 0, mImageHeight = 0;
 	private volatile Boolean mRunning = false;
-	private volatile Integer mDelayInMiliseconds = 1000;
+	private volatile Integer mDelayInMiliseconds = 300;
 
 	/**
 	 * Locks for synchronized access to shared fields.
