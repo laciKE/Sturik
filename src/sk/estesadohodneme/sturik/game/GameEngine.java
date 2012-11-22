@@ -74,7 +74,7 @@ public class GameEngine implements Runnable, Serializable {
 	 * @throws IllegalStateException
 	 *             when call this function while game is running
 	 */
-	// TODO uncomments available types of Game
+
 	public void setGame(int gameType) throws IllegalStateException {
 		synchronized (mRunning) {
 			if (mRunning) {
@@ -87,7 +87,7 @@ public class GameEngine implements Runnable, Serializable {
 				mGame = new GameSnake();
 				break;
 			case GAME_TETRIS:
-				// mGame = new GameTetris();
+				mGame = new GameTetris();
 				break;
 			default:
 				mGame = null;
@@ -227,15 +227,14 @@ public class GameEngine implements Runnable, Serializable {
 	 * 
 	 * @return if game starts, return true, false otherwise.
 	 */
-	// TODO uncomment null pointer checks
 	public boolean start() {
 		synchronized (mRunning) {
 			mGameLock.lock();
 			mImageGeneratorLock.lock();
 			try {
-				if ((mRunning) || (mGame == null) /*
-												 * || (mImageGenerator == null)
-												 */) {
+				if ((mRunning) || (mGame == null) 
+												  || (mImageGenerator == null)
+												 ) {
 					return false;
 				}
 			} finally {
@@ -266,7 +265,6 @@ public class GameEngine implements Runnable, Serializable {
 	/**
 	 * Runnable for run game.
 	 */
-	// TODO uncomment parts with mGame and mImageGenerator
 	@Override
 	public void run() {
 		boolean running;
