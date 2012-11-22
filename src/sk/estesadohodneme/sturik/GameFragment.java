@@ -52,7 +52,7 @@ public class GameFragment extends Fragment implements
 			ImageButton button = (ImageButton) mView.findViewById(buttonId);
 			button.setOnClickListener(new OnClickListener() {
 
-				@Override
+				// @Override
 				public void onClick(View v) {
 					mGameEngine.setUserAction(userAction);
 				}
@@ -62,7 +62,7 @@ public class GameFragment extends Fragment implements
 		mUpdateGameBoard = new Runnable() {
 
 			@SuppressWarnings("deprecation")
-			@Override
+			// @Override
 			public void run() {
 				RelativeLayout gameBoard = (RelativeLayout) mView
 						.findViewById(R.id.game_board);
@@ -100,7 +100,7 @@ public class GameFragment extends Fragment implements
 	/**
 	 * Updates game board.
 	 */
-	@Override
+	// @Override
 	public void onGameBoardChanged() {
 		mHandler.post(mUpdateGameBoard);
 	}

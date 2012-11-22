@@ -274,7 +274,7 @@ public class GameEngine implements Runnable, Serializable {
 	/**
 	 * Runnable for run game.
 	 */
-	@Override
+	// @Override
 	public void run() {
 		boolean running;
 		synchronized (mRunning) {

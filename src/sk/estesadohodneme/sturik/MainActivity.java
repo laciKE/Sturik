@@ -46,7 +46,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
 	 * Handles button clicks for selection game on {@link WelcomeFragment}.
 	 */
 	@SuppressWarnings("deprecation")
-	@Override
+	// @Override
 	public void onClick(View v) {
 		/*
 		 * Sets parameters of game engine;
