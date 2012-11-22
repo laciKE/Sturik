@@ -4,8 +4,6 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import android.util.Log;
-
 public class GameSnake extends Game {
 
 	public static final int BOARD_WIDTH = 15;

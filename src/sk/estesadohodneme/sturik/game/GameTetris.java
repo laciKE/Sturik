@@ -2,6 +2,8 @@ package sk.estesadohodneme.sturik.game;
 
 import java.util.Random;
 
+import android.util.Log;
+
 public class GameTetris extends Game {
 
 	public static final int BOARD_WIDTH = 15;
@@ -10,7 +12,7 @@ public class GameTetris extends Game {
 	public static final short BOARD_PIECE = 2;
 	public static final short BOARD_PILE = 1;
 	
-	public static final int DESCENT_TIME = 5;
+	public static final int DESCENT_TIME = 2;
 	
 	protected short[][] mBoard = new short[BOARD_HEIGHT][BOARD_WIDTH];
 	protected Random mRandom = new Random();
@@ -23,7 +25,7 @@ public class GameTetris extends Game {
 		return mIsFinished;
 	}
 	public int getDefaultDelay() {
-		return 200;
+		return 100;
 	}
 	
 	
@@ -344,6 +346,7 @@ public class GameTetris extends Game {
 	
 	@Override
 	public short[][] doStep(UserAction userAction) {
+		Log.d("TETRIS","KROK");
 		mDescentTime = (mDescentTime + 1) % DESCENT_TIME;
 		int dx=0,dy=0,dr=0;
 		if (userAction.isActionDown()) dr = 3;
