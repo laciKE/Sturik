@@ -102,6 +102,11 @@ public class GameEngine implements Runnable, Serializable {
 				mGame = null;
 				break;
 			}
+			
+			//sets correct default delay for given game type
+			if(mGame != null){
+				setDelay(mGame.getDefaultDelay());
+			}
 		}
 	}
 
@@ -150,7 +155,6 @@ public class GameEngine implements Runnable, Serializable {
 		mImageHeight = height;
 		mImageGeneratorLock.lock();
 		try {
-			Log.d("STURIK", "setimagesize " + width + height);
 			mImageGenerator.setImageSize(mImageWidth, mImageHeight);
 		} finally {
 			mImageGeneratorLock.unlock();
@@ -268,7 +272,6 @@ public class GameEngine implements Runnable, Serializable {
 		synchronized (mRunning) {
 			mRunning = false;
 		}
-		Log.d("STURIK", "GameEngine stop");
 	}
 
 	/**
@@ -277,6 +280,7 @@ public class GameEngine implements Runnable, Serializable {
 	// @Override
 	public void run() {
 		boolean running;
+		boolean isFinished = false;
 		synchronized (mRunning) {
 			running = mRunning;
 		}
@@ -296,6 +300,7 @@ public class GameEngine implements Runnable, Serializable {
 //				if (mUserAction.isActionDown())
 //					Log.d("STURIK", "down");
 				rawGameBoard = mGame.doStep(mUserAction);
+				isFinished = mGame.isFinished();
 				mUserAction.clear();
 			} finally {
 				mGameLock.unlock();
@@ -322,9 +327,13 @@ public class GameEngine implements Runnable, Serializable {
 				} // finish thread
 			}
 			synchronized (mRunning) {
+				if(isFinished) {
+					mRunning = false;
+				}
 				running = mRunning;
 			}
 		}
+		Log.d("STURIK", "GameEngine stop");
 	}
 
 }
