@@ -48,7 +48,7 @@ public class GameEngine implements Runnable, Serializable {
 	private volatile Bitmap mGameBoard = null;
 	private int mImageWidth = 0, mImageHeight = 0;
 	private volatile Boolean mRunning = false;
-	private volatile Integer mDelayInMiliseconds = 300;
+	private volatile Integer mDelayInMiliseconds = 600;
 
 	/**
 	 * Locks for synchronized access to shared fields.
@@ -141,7 +141,7 @@ public class GameEngine implements Runnable, Serializable {
 		mImageHeight = height;
 		mImageGeneratorLock.lock();
 		try {
-			Log.d("STURIK", "setimagesize "+width+height);
+			Log.d("STURIK", "setimagesize " + width + height);
 			mImageGenerator.setImageSize(mImageWidth, mImageHeight);
 		} finally {
 			mImageGeneratorLock.unlock();
@@ -209,7 +209,7 @@ public class GameEngine implements Runnable, Serializable {
 	 * @return copy of internal game board
 	 */
 	public Bitmap getGameBoard() {
-		mGameBoardLock.lock();
+		/*mGameBoardLock.lock();
 		Bitmap bitmap = null;
 		try {
 			bitmap = mGameBoard.copy(mGameBoard.getConfig(), false);
@@ -220,6 +220,8 @@ public class GameEngine implements Runnable, Serializable {
 		}
 
 		return bitmap;
+		*/
+		return mGameBoard;
 	}
 
 	/**
@@ -232,9 +234,7 @@ public class GameEngine implements Runnable, Serializable {
 			mGameLock.lock();
 			mImageGeneratorLock.lock();
 			try {
-				if ((mRunning) || (mGame == null) 
-												  || (mImageGenerator == null)
-												 ) {
+				if ((mRunning) || (mGame == null) || (mImageGenerator == null)) {
 					return false;
 				}
 			} finally {

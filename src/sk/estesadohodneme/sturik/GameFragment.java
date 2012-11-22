@@ -62,16 +62,19 @@ public class GameFragment extends Fragment {
 			@SuppressWarnings("deprecation")
 			@Override
 			public void run() {
+				Log.d("STURIK", "start of update screen");
 				RelativeLayout gameBoard = (RelativeLayout) mView
 						.findViewById(R.id.game_board);
 				Bitmap bitmap = mGameEngine.getGameBoard();
 				Drawable background = new BitmapDrawable(getResources(), bitmap);
 				gameBoard.setBackgroundDrawable(background);
-				
-				mHandler.postDelayed(mUpdateGameBoard, mGameEngine.getDelay());
+				Log.d("STURIK", "end of update screen");
+
+				mHandler.postDelayed(mUpdateGameBoard,
+						2 * mGameEngine.getDelay() / 3);
 			}
 		};
-		
+
 		return mView;
 	}
 
