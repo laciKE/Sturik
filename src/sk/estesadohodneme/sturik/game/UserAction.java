@@ -29,8 +29,8 @@ public class UserAction {
 	 *            should be one of ACTION_LEFT, ACTION_RIGHT, ACTION_DOWN or
 	 *            ACTION_UP
 	 */
-	public void setAction(int action) {
-		mAction |= action;
+	public void setAction(byte action) {
+		mAction = action;
 	}
 
 	/**
