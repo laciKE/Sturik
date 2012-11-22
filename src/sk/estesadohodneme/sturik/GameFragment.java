@@ -2,6 +2,7 @@ package sk.estesadohodneme.sturik;
 
 import sk.estesadohodneme.sturik.game.GameEngine;
 import sk.estesadohodneme.sturik.game.OnGameBoardChangedListener;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -28,6 +29,7 @@ public class GameFragment extends Fragment implements
 	private Handler mHandler = new Handler();
 	private Runnable mUpdateGameBoard;
 	private View mView;
+	private Resources mResources;
 
 	@Override
 	public void setArguments(Bundle args) {
@@ -41,6 +43,7 @@ public class GameFragment extends Fragment implements
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		mView = inflater.inflate(R.layout.game, container, false);
+		mResources = getResources();
 
 		int[][] actions = { { R.id.button_left, GameEngine.ACTION_LEFT },
 				{ R.id.button_right, GameEngine.ACTION_RIGHT },
@@ -66,9 +69,11 @@ public class GameFragment extends Fragment implements
 			public void run() {
 				RelativeLayout gameBoard = (RelativeLayout) mView
 						.findViewById(R.id.game_board);
-				Bitmap bitmap = mGameEngine.getGameBoard();
-				Drawable background = new BitmapDrawable(getResources(), bitmap);
-				gameBoard.setBackgroundDrawable(background);
+				if (gameBoard != null) {
+					Bitmap bitmap = mGameEngine.getGameBoard();
+					Drawable background = new BitmapDrawable(mResources, bitmap);
+					gameBoard.setBackgroundDrawable(background);
+				}
 			}
 		};
 

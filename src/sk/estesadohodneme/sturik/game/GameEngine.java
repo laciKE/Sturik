@@ -301,6 +301,7 @@ public class GameEngine implements Runnable, Serializable {
 //					Log.d("STURIK", "down");
 				rawGameBoard = mGame.doStep(mUserAction);
 				isFinished = mGame.isFinished();
+//				Log.d("STURIK","finished "+isFinished);
 				mUserAction.clear();
 			} finally {
 				mGameLock.unlock();
