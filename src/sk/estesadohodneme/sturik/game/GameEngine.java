@@ -267,7 +267,6 @@ public class GameEngine implements Runnable, Serializable {
 	 * Runnable for run game.
 	 */
 	// TODO uncomment parts with mGame and mImageGenerator
-	@Override
 	public void run() {
 		boolean running;
 		synchronized (mRunning) {

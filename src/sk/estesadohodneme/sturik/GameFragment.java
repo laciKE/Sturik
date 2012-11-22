@@ -50,7 +50,6 @@ public class GameFragment extends Fragment {
 			ImageButton button = (ImageButton) mView.findViewById(buttonId);
 			button.setOnClickListener(new OnClickListener() {
 
-				@Override
 				public void onClick(View v) {
 					mGameEngine.setUserAction(userAction);
 				}
@@ -60,7 +59,6 @@ public class GameFragment extends Fragment {
 		mUpdateGameBoard = new Runnable() {
 
 			@SuppressWarnings("deprecation")
-			@Override
 			public void run() {
 				RelativeLayout gameBoard = (RelativeLayout) mView
 						.findViewById(R.id.game_board);

@@ -4,6 +4,8 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import android.util.Log;
+
 public class GameSnake extends Game {
 
 	public static final int BOARD_WIDTH = 15;
@@ -14,13 +16,14 @@ public class GameSnake extends Game {
 	public static final int BOARD_FOOD  = 3;
 	public static final int BOARD_SCORE = 4;
 	public static final int SNAKE_LIFES = 10;
-	public static final int SCORE_DURATION = 10;
+	public static final int SCORE_DURATION = 5;
 	
 	protected Queue<Integer> mSnake;
 	protected short[][] mBoard = new short[BOARD_HEIGHT][BOARD_WIDTH];
 	protected Random mRandom = new Random();
 	
 	protected int mShowScore;
+	protected int mSnakeHead;
 	protected int mSnakeStock;
 	protected int mSnakeVX,mSnakeVY;
 	protected int mKilledSnakes;
@@ -28,6 +31,9 @@ public class GameSnake extends Game {
 	
 	public boolean isFinished() {
 		return mIsFinished;
+	}
+	public int getDefaultDelay() {
+		return 200;
 	}
 	
 	protected short[][] digitBitmap() {
@@ -168,9 +174,9 @@ public class GameSnake extends Game {
 	}
 	
 	protected void newSnake() {
-		int startingPos = findEmptyPosition();
-		mSnake.add(startingPos);
-		mBoard[startingPos/BOARD_WIDTH][startingPos%BOARD_WIDTH] = BOARD_HEAD;
+		mSnakeHead = findEmptyPosition();
+		mSnake.add(mSnakeHead);
+		mBoard[mSnakeHead/BOARD_WIDTH][mSnakeHead%BOARD_WIDTH] = BOARD_HEAD;
 		mSnakeVX = 0;
 		mSnakeVY = 0;
 		
@@ -184,10 +190,11 @@ public class GameSnake extends Game {
 	}
 	
 	public GameSnake() {
+		mSnake = new LinkedBlockingQueue<Integer>();
+		
 		mIsFinished = false;
 		mKilledSnakes = 0;
 		mShowScore = 0;
-		mSnake = new LinkedBlockingQueue<Integer>();
 		clearBoard();
 		boardAddFood();
 		newSnake();
@@ -227,22 +234,25 @@ public class GameSnake extends Game {
 			return mBoard;
 		}
 		
-		updateDirection(userAction);
-		
+		updateDirection(userAction);		
 		if ((mSnakeVX == 0)&&(mSnakeVY == 0))
 			return mBoard;
 		
-		int newX = mSnake.peek()%BOARD_WIDTH + mSnakeVX;
-		int newY = mSnake.peek()/BOARD_WIDTH + mSnakeVY;
+		int newX = mSnakeHead%BOARD_WIDTH;
+		int newY = mSnakeHead/BOARD_WIDTH;
+		mBoard[newY][newX] = BOARD_SNAKE;
+		newX += mSnakeVX;
+		newY += mSnakeVY;
 		
 		if ((newX<0)||(newX>=BOARD_WIDTH)||(newY<0)||(newY>=BOARD_HEIGHT)) {
 			killSnake();
 			return mBoard;
 		}
 		
+		boolean noFood = false;
 		if (mBoard[newY][newX] == BOARD_FOOD) {
-			mSnakeStock++;
-			boardAddFood();
+			mSnakeStock+=3;
+			noFood = true;
 		}
 		else if (mBoard[newY][newX] != BOARD_EMPTY) {
 			killSnake();
@@ -256,9 +266,11 @@ public class GameSnake extends Game {
 			int old = mSnake.remove();
 			mBoard[old/BOARD_WIDTH][old%BOARD_WIDTH] = BOARD_EMPTY;
 		}
-			
-		mSnake.add(newY*BOARD_WIDTH + newX);
-		mBoard[newX][newY] = BOARD_HEAD;
+		
+		mSnakeHead = newY*BOARD_WIDTH + newX;
+		mSnake.add(mSnakeHead);
+		mBoard[newY][newX] = BOARD_HEAD;
+		if (noFood) boardAddFood();
 		
 		return mBoard;
 	}

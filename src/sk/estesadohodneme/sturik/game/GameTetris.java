@@ -22,6 +22,10 @@ public class GameTetris extends Game {
 	public boolean isFinished() {
 		return mIsFinished;
 	}
+	public int getDefaultDelay() {
+		return 200;
+	}
+	
 	
 	public static final short[][][][] mPieces =  //kind X rotation X 2D bitmap 
 	{
