@@ -1,6 +1,5 @@
 package sk.estesadohodneme.sturik.game;
 
-import java.util.ArrayList;
 import java.util.Queue;
 import java.util.Random;
 
@@ -158,6 +157,7 @@ public class GameSnake extends Game {
 			mBoard[p/BOARD_WIDTH][p%BOARD_WIDTH] = BOARD_EMPTY;
 		}*/
 		clearBoard();
+		mSnake.clear();
 		
 		mShowScore = SCORE_DURATION;
 		
@@ -167,7 +167,6 @@ public class GameSnake extends Game {
 	}
 	
 	protected void newSnake() {
-		mSnake.clear();
 		int startingPos = findEmptyPosition();
 		mSnake.add(startingPos);
 		mBoard[startingPos/BOARD_WIDTH][startingPos%BOARD_WIDTH] = BOARD_HEAD;
@@ -191,6 +190,26 @@ public class GameSnake extends Game {
 		boardAddFood();
 		newSnake();
 	}
+	
+	protected void updateDirection(UserAction userAction) {
+		if (userAction.isActionLeft()&&(mSnakeVX==0)) {
+				mSnakeVX=-1;
+				mSnakeVY= 0;
+			}
+		if (userAction.isActionRight()&&(mSnakeVX==0)) {
+			mSnakeVX= 1;
+			mSnakeVY= 0;
+		}
+		if (userAction.isActionUp()&&(mSnakeVY==0)) {
+			mSnakeVX= 0;
+			mSnakeVY=-1;
+		}
+		if (userAction.isActionDown()&&(mSnakeVY==0)) {
+			mSnakeVX= 0;
+			mSnakeVY= 1;
+		}
+	}
+	
 	@Override
 	public short[][] doStep(UserAction userAction) {
 		if (mShowScore > 0) { 
@@ -205,6 +224,8 @@ public class GameSnake extends Game {
 			
 			return mBoard;
 		}
+		
+		updateDirection(userAction);
 		
 		if ((mSnakeVX == 0)&&(mSnakeVY == 0))
 			return mBoard;
