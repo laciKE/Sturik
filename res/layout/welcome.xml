@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:contentDescription="@string/sturik"
+        android:src="@drawable/sturik_title" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <ImageButton
+            android:id="@+id/button_snake"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/black"
+            android:contentDescription="@string/snake"
+            android:scaleType="fitCenter"
+            android:src="@drawable/snake_title" />
+
+        <ImageButton
+            android:id="@+id/button_snake_mlyny"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/black"
+            android:contentDescription="@string/snake_mlyny"
+            android:scaleType="fitCenter"
+            android:src="@drawable/snake_mlyny_title" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <ImageButton
+            android:id="@+id/button_tetris"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/black"
+            android:contentDescription="@string/tetris"
+            android:scaleType="fitCenter"
+            android:src="@drawable/tetris_title" />
+
+        <ImageButton
+            android:id="@+id/button_tetris_mlyny"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/black"
+            android:contentDescription="@string/tetris_mlyny"
+            android:scaleType="fitCenter"
+            android:src="@drawable/tetris_mlyny_title" />
+    </LinearLayout>
+    
+</LinearLayout>

@@ -1,6 +1,7 @@
 package sk.estesadohodneme.sturik;
 
 import sk.estesadohodneme.sturik.game.GameEngine;
+import sk.estesadohodneme.sturik.game.OnGameBoardChangedListener;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -18,7 +19,8 @@ import android.widget.RelativeLayout;
 /**
  * Creates fragment for game.
  */
-public class GameFragment extends Fragment {
+public class GameFragment extends Fragment implements
+		OnGameBoardChangedListener {
 
 	public static final String GAME_ENGINE = "game engine";
 
@@ -50,6 +52,7 @@ public class GameFragment extends Fragment {
 			ImageButton button = (ImageButton) mView.findViewById(buttonId);
 			button.setOnClickListener(new OnClickListener() {
 
+				@Override
 				public void onClick(View v) {
 					mGameEngine.setUserAction(userAction);
 				}
@@ -59,17 +62,16 @@ public class GameFragment extends Fragment {
 		mUpdateGameBoard = new Runnable() {
 
 			@SuppressWarnings("deprecation")
+			@Override
 			public void run() {
 				RelativeLayout gameBoard = (RelativeLayout) mView
 						.findViewById(R.id.game_board);
 				Bitmap bitmap = mGameEngine.getGameBoard();
 				Drawable background = new BitmapDrawable(getResources(), bitmap);
 				gameBoard.setBackgroundDrawable(background);
-				
-				mHandler.postDelayed(mUpdateGameBoard, mGameEngine.getDelay());
 			}
 		};
-		
+
 		return mView;
 	}
 
@@ -79,8 +81,8 @@ public class GameFragment extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
+		mGameEngine.setOnGameBoardChangeListener(this);
 		mGameEngine.start();
-		mHandler.postDelayed(mUpdateGameBoard, mGameEngine.getDelay() / 2);
 		Log.d("STURIK", "GameFragment start");
 	}
 
@@ -93,5 +95,13 @@ public class GameFragment extends Fragment {
 		mHandler.removeCallbacks(mUpdateGameBoard);
 		mGameEngine.stop();
 		super.onPause();
+	}
+
+	/**
+	 * Updates game board.
+	 */
+	@Override
+	public void onGameBoardChanged() {
+		mHandler.post(mUpdateGameBoard);
 	}
 }

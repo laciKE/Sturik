@@ -48,7 +48,8 @@ public class GameEngine implements Runnable, Serializable {
 	private volatile Bitmap mGameBoard = null;
 	private int mImageWidth = 0, mImageHeight = 0;
 	private volatile Boolean mRunning = false;
-	private volatile Integer mDelayInMiliseconds = 1000;
+	private volatile Integer mDelayInMiliseconds = 500;
+	private volatile OnGameBoardChangedListener mOnGameBoardChangedListener = null;
 
 	/**
 	 * Locks for synchronized access to shared fields.
@@ -64,6 +65,14 @@ public class GameEngine implements Runnable, Serializable {
 	public GameEngine() {
 		mUserAction = new UserAction();
 	}
+	
+	/**
+	 * Sets {@link OnGameBoardChangedListener}. Should be call before game starts.
+	 * @param listener
+	 */
+	public void setOnGameBoardChangeListener(OnGameBoardChangedListener listener){
+			mOnGameBoardChangedListener = listener;			
+	}
 
 	/**
 	 * Set type of game: creates new instance of concrete game and holds
@@ -74,7 +83,7 @@ public class GameEngine implements Runnable, Serializable {
 	 * @throws IllegalStateException
 	 *             when call this function while game is running
 	 */
-	// TODO uncomments available types of Game
+
 	public void setGame(int gameType) throws IllegalStateException {
 		synchronized (mRunning) {
 			if (mRunning) {
@@ -87,7 +96,7 @@ public class GameEngine implements Runnable, Serializable {
 				mGame = new GameSnake();
 				break;
 			case GAME_TETRIS:
-				// mGame = new GameTetris();
+				mGame = new GameTetris();
 				break;
 			default:
 				mGame = null;
@@ -141,7 +150,7 @@ public class GameEngine implements Runnable, Serializable {
 		mImageHeight = height;
 		mImageGeneratorLock.lock();
 		try {
-			Log.d("STURIK", "setimagesize "+width+height);
+			Log.d("STURIK", "setimagesize " + width + height);
 			mImageGenerator.setImageSize(mImageWidth, mImageHeight);
 		} finally {
 			mImageGeneratorLock.unlock();
@@ -209,7 +218,7 @@ public class GameEngine implements Runnable, Serializable {
 	 * @return copy of internal game board
 	 */
 	public Bitmap getGameBoard() {
-		mGameBoardLock.lock();
+		/*mGameBoardLock.lock();
 		Bitmap bitmap = null;
 		try {
 			bitmap = mGameBoard.copy(mGameBoard.getConfig(), false);
@@ -220,6 +229,8 @@ public class GameEngine implements Runnable, Serializable {
 		}
 
 		return bitmap;
+		*/
+		return mGameBoard;
 	}
 
 	/**
@@ -227,15 +238,12 @@ public class GameEngine implements Runnable, Serializable {
 	 * 
 	 * @return if game starts, return true, false otherwise.
 	 */
-	// TODO uncomment null pointer checks
 	public boolean start() {
 		synchronized (mRunning) {
 			mGameLock.lock();
 			mImageGeneratorLock.lock();
 			try {
-				if ((mRunning) || (mGame == null) /*
-												 * || (mImageGenerator == null)
-												 */) {
+				if ((mRunning) || (mGame == null) || (mImageGenerator == null)) {
 					return false;
 				}
 			} finally {
@@ -266,27 +274,27 @@ public class GameEngine implements Runnable, Serializable {
 	/**
 	 * Runnable for run game.
 	 */
-	// TODO uncomment parts with mGame and mImageGenerator
+	@Override
 	public void run() {
 		boolean running;
 		synchronized (mRunning) {
 			running = mRunning;
 		}
-		int counter = 0;
+//		int counter = 0;
 		short[][] rawGameBoard;
 		while (running) {
-			Log.d("STURIK", "running " + (counter++));
+//			Log.d("STURIK", "running " + (counter++));
 			mUserActionLock.lock();
 			mGameLock.lock();
 			try {
-				if (mUserAction.isActionLeft())
-					Log.d("STURIK", "left");
-				if (mUserAction.isActionRight())
-					Log.d("STURIK", "right");
-				if (mUserAction.isActionUp())
-					Log.d("STURIK", "up");
-				if (mUserAction.isActionDown())
-					Log.d("STURIK", "down");
+//				if (mUserAction.isActionLeft())
+//					Log.d("STURIK", "left");
+//				if (mUserAction.isActionRight())
+//					Log.d("STURIK", "right");
+//				if (mUserAction.isActionUp())
+//					Log.d("STURIK", "up");
+//				if (mUserAction.isActionDown())
+//					Log.d("STURIK", "down");
 				rawGameBoard = mGame.doStep(mUserAction);
 				mUserAction.clear();
 			} finally {
@@ -301,6 +309,7 @@ public class GameEngine implements Runnable, Serializable {
 				mGameBoardLock.unlock();
 				mImageGeneratorLock.unlock();
 			}
+			mOnGameBoardChangedListener.onGameBoardChanged();
 			int delayInMiliseconds;
 			synchronized (mDelayInMiliseconds) {
 				delayInMiliseconds = mDelayInMiliseconds;

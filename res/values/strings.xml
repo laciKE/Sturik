@@ -7,5 +7,11 @@
     <string name="right">Right</string>
     <string name="up">Up</string>
     <string name="down">Down</string>
+    <string name="sturik">Sturik</string>
+    <string name="snake">Snake</string>
+    <string name="snake_mlyny">Snake Mlyny</string>
+    <string name="tetris">Tetris</string>
+    <string name="tetris_mlyny">Tetris Mlyny</string>
+    <string name="unimplemented_game">Game has not been implemented yet.</string>
 
 </resources>
