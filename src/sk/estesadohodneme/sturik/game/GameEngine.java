@@ -111,7 +111,7 @@ public class GameEngine implements Runnable, Serializable {
 
 			switch (imageGeneratorType) {
 			case IMAGE_GENERATOR_SIMPLE:
-				// mImageGenerator = new ImageGeneratorSimple();
+				mImageGenerator = new ImageGeneratorSimple();
 				break;
 			case IMAGE_GENERATOR_MLYNY:
 				// mImageGenerator = new ImageGeneratorMlyny();
@@ -141,6 +141,7 @@ public class GameEngine implements Runnable, Serializable {
 		mImageHeight = height;
 		mImageGeneratorLock.lock();
 		try {
+			Log.d("STURIK", "setimagesize "+width+height);
 			mImageGenerator.setImageSize(mImageWidth, mImageHeight);
 		} finally {
 			mImageGeneratorLock.unlock();
@@ -296,7 +297,7 @@ public class GameEngine implements Runnable, Serializable {
 			mImageGeneratorLock.lock();
 			mGameBoardLock.lock();
 			try {
-				// mGameBoard = mImageGenerator.generate(rawGameBoard);
+				mGameBoard = mImageGenerator.generate(rawGameBoard);
 			} finally {
 				mGameBoardLock.unlock();
 				mImageGeneratorLock.unlock();

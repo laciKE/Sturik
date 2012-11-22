@@ -55,7 +55,6 @@ public class GameFragment extends Fragment {
 					mGameEngine.setUserAction(userAction);
 				}
 			});
-
 		}
 
 		mUpdateGameBoard = new Runnable() {

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.view.Display;
 
 /**
  * Creates fragment for game.
@@ -16,6 +17,7 @@ public class MainActivity extends FragmentActivity {
 	/**
 	 * Creates fragment for game, creates gameEngine and sets its parameters.
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -27,7 +29,8 @@ public class MainActivity extends FragmentActivity {
 		mGameEngine = new GameEngine();
 		mGameEngine.setGame(GameEngine.GAME_SNAKE);
 		mGameEngine.setImageGenerator(GameEngine.IMAGE_GENERATOR_SIMPLE);
-		//mGameEngine.setImageSize(320, 240);
+		Display display = getWindowManager().getDefaultDisplay();
+		mGameEngine.setImageSize(display.getWidth(), display.getHeight());
 		
 		Bundle args = new Bundle();
 		args.putSerializable(GameFragment.GAME_ENGINE, mGameEngine);
