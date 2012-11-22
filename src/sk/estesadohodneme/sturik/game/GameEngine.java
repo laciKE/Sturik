@@ -48,7 +48,8 @@ public class GameEngine implements Runnable, Serializable {
 	private volatile Bitmap mGameBoard = null;
 	private int mImageWidth = 0, mImageHeight = 0;
 	private volatile Boolean mRunning = false;
-	private volatile Integer mDelayInMiliseconds = 600;
+	private volatile Integer mDelayInMiliseconds = 500;
+	private volatile OnGameBoardChangedListener mOnGameBoardChangedListener = null;
 
 	/**
 	 * Locks for synchronized access to shared fields.
@@ -63,6 +64,14 @@ public class GameEngine implements Runnable, Serializable {
 	 */
 	public GameEngine() {
 		mUserAction = new UserAction();
+	}
+	
+	/**
+	 * Sets {@link OnGameBoardChangedListener}. Should be call before game starts.
+	 * @param listener
+	 */
+	public void setOnGameBoardChangeListener(OnGameBoardChangedListener listener){
+			mOnGameBoardChangedListener = listener;			
 	}
 
 	/**
@@ -271,21 +280,21 @@ public class GameEngine implements Runnable, Serializable {
 		synchronized (mRunning) {
 			running = mRunning;
 		}
-		int counter = 0;
+//		int counter = 0;
 		short[][] rawGameBoard;
 		while (running) {
-			Log.d("STURIK", "running " + (counter++));
+//			Log.d("STURIK", "running " + (counter++));
 			mUserActionLock.lock();
 			mGameLock.lock();
 			try {
-				if (mUserAction.isActionLeft())
-					Log.d("STURIK", "left");
-				if (mUserAction.isActionRight())
-					Log.d("STURIK", "right");
-				if (mUserAction.isActionUp())
-					Log.d("STURIK", "up");
-				if (mUserAction.isActionDown())
-					Log.d("STURIK", "down");
+//				if (mUserAction.isActionLeft())
+//					Log.d("STURIK", "left");
+//				if (mUserAction.isActionRight())
+//					Log.d("STURIK", "right");
+//				if (mUserAction.isActionUp())
+//					Log.d("STURIK", "up");
+//				if (mUserAction.isActionDown())
+//					Log.d("STURIK", "down");
 				rawGameBoard = mGame.doStep(mUserAction);
 				mUserAction.clear();
 			} finally {
@@ -300,6 +309,7 @@ public class GameEngine implements Runnable, Serializable {
 				mGameBoardLock.unlock();
 				mImageGeneratorLock.unlock();
 			}
+			mOnGameBoardChangedListener.onGameBoardChanged();
 			int delayInMiliseconds;
 			synchronized (mDelayInMiliseconds) {
 				delayInMiliseconds = mDelayInMiliseconds;
