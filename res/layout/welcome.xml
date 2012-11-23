@@ -11,56 +11,62 @@
         android:contentDescription="@string/sturik"
         android:src="@drawable/sturik_title" />
 
-    <LinearLayout
+    <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:layout_height="0dp"
+        android:layout_weight="1" >
 
-        <ImageButton
-            android:id="@+id/button_snake"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/black"
-            android:contentDescription="@string/snake"
-            android:scaleType="fitCenter"
-            android:src="@drawable/snake_title" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" >
 
-        <ImageButton
-            android:id="@+id/button_snake_mlyny"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/black"
-            android:contentDescription="@string/snake_mlyny"
-            android:scaleType="fitCenter"
-            android:src="@drawable/snake_mlyny_title" />
-    </LinearLayout>
+            <ImageButton
+                android:id="@+id/button_snake"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/black"
+                android:contentDescription="@string/snake"
+                android:scaleType="fitCenter"
+                android:src="@drawable/snake_title" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+            <ImageButton
+                android:id="@+id/button_snake_mlyny"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:background="@android:color/black"
+                android:contentDescription="@string/snake_mlyny"
+                android:scaleType="fitCenter"
+                android:src="@drawable/snake_mlyny_title" />
+        </TableRow>
 
-        <ImageButton
-            android:id="@+id/button_tetris"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/black"
-            android:contentDescription="@string/tetris"
-            android:scaleType="fitCenter"
-            android:src="@drawable/tetris_title" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" >
 
-        <ImageButton
-            android:id="@+id/button_tetris_mlyny"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/black"
-            android:contentDescription="@string/tetris_mlyny"
-            android:scaleType="fitCenter"
-            android:src="@drawable/tetris_mlyny_title" />
-    </LinearLayout>
-    
+            <ImageButton
+                android:id="@+id/button_tetris"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/black"
+                android:contentDescription="@string/tetris"
+                android:scaleType="fitCenter"
+                android:src="@drawable/tetris_title" />
+
+            <ImageButton
+                android:id="@+id/button_tetris_mlyny"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:background="@android:color/black"
+                android:contentDescription="@string/tetris_mlyny"
+                android:scaleType="fitCenter"
+                android:src="@drawable/tetris_mlyny_title" />
+        </TableRow>
+    </TableLayout>
+
 </LinearLayout>

@@ -11,8 +11,10 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -39,6 +41,7 @@ public class GameFragment extends Fragment implements
 	/**
 	 * Returns view for {@link GameFragment}.
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -53,6 +56,7 @@ public class GameFragment extends Fragment implements
 			int buttonId = action[0];
 			final int userAction = action[1];
 			ImageButton button = (ImageButton) mView.findViewById(buttonId);
+			
 			button.setOnClickListener(new OnClickListener() {
 
 				// @Override
@@ -60,11 +64,27 @@ public class GameFragment extends Fragment implements
 					mGameEngine.setUserAction(userAction);
 				}
 			});
+			
+			// set button press feedback based on transparency
+			button.setAlpha(192);
+			button.setOnTouchListener(new OnTouchListener() {
+				
+				// @Override
+				public boolean onTouch(View v, MotionEvent event) {
+					ImageButton imageButton = (ImageButton) v;
+					if(event.getAction() == MotionEvent.ACTION_DOWN){
+						imageButton.setAlpha(255);
+					}
+					if(event.getAction() == MotionEvent.ACTION_UP){
+						imageButton.setAlpha(192);
+					}
+					return false;
+				}
+			});
 		}
 
 		mUpdateGameBoard = new Runnable() {
 
-			@SuppressWarnings("deprecation")
 			// @Override
 			public void run() {
 				RelativeLayout gameBoard = (RelativeLayout) mView
