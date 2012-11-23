@@ -12,7 +12,7 @@ public class GameTetris extends Game {
 	public static final short BOARD_PIECE = 2;
 	public static final short BOARD_PILE = 1;
 	
-	public static final int DESCENT_TIME = 2;
+	public static final int DESCENT_TIME = 1;
 	
 	protected short[][] mBoard = new short[BOARD_HEIGHT][BOARD_WIDTH];
 	protected Random mRandom = new Random();
@@ -255,25 +255,25 @@ public class GameTetris extends Game {
 		/* Square */
 		  { -3,-3,-3,-3 },
 		/* I */
-		  { -2,-3,-2,-3 },
+		  { -3,-2,-3,-1 },
 		/* L */
-		  { -3,-3,-3,-2 },
+		  { -2,-3,-2,-2 },
 		/* L mirrored */
-		  { -3,-2,-3,-3 },
+		  { -2,-2,-2,-3 },
 		/* N */
-		  { -3,-3,-3,-2 },
+		  { -2,-3,-2,-2 },
 		/* N mirrored */
-		  { -3,-3,-3,-2 },
+		  { -2,-3,-2,-2 },
 		/* T */
-		  { -3,-3,-3,-2 },
+		  { -2,-2,-3,-2 },
 		};
 	
 	protected void deleteLine(int y) {
 	    for (int i=y;i>0;i--)
 	    for (int j=0;j<BOARD_WIDTH;j++)
-	    	mBoard[j][i] = mBoard[j][i-1];
+	    	mBoard[i][j] = mBoard[i-1][j];
 	}
-	protected void findAndDeleteFullLines () {
+	protected void findAndDeleteFullLines() {
 	    for(int i=0;i<BOARD_HEIGHT;i++) {
 	    	int j=0;
 	    	for(;j<BOARD_WIDTH;j++)
@@ -346,7 +346,7 @@ public class GameTetris extends Game {
 	
 	@Override
 	public short[][] doStep(UserAction userAction) {
-		Log.d("TETRIS","KROK");
+		
 		mDescentTime = (mDescentTime + 1) % DESCENT_TIME;
 		int dx=0,dy=0,dr=0;
 		if (userAction.isActionDown()) dr = 3;
@@ -365,18 +365,18 @@ public class GameTetris extends Game {
 		}
 		
 		if(dy>0) {
-			clearPiece();
 			if (isMoveAllowed(mPieceType,mPieceRotation,mPieceX,mPieceY+dy)) {
+				clearPiece();
 				mPieceY += dy;
 				storePiece(BOARD_PIECE);
 			}
 			else {
 				storePiece(BOARD_PILE);
+				findAndDeleteFullLines();
 				newPiece();
 			}
 		}
 		
 		return mBoard;
 	}
-
 }
