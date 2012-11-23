@@ -10,6 +10,8 @@ import android.graphics.Paint;
  */
 public class ImageGeneratorSimple extends ImageGenerator {
 
+	Paint mPaint = new Paint();
+	
 	/**
 	 * Generates image from given array.
 	 * @param gameBoard returned by {@link Game}.doStep()
@@ -18,14 +20,13 @@ public class ImageGeneratorSimple extends ImageGenerator {
 	@Override
 	public Bitmap generate(short[][] gameBoard) {
 		Bitmap bitmap = Bitmap.createBitmap(mWidth, mHeight,
-				Bitmap.Config.ARGB_8888);
+				Bitmap.Config.RGB_565);
 		Canvas canvas = new Canvas(bitmap);
 		
-		Paint paint = new Paint();
-		paint.setColor(Color.WHITE);
-		paint.setStrokeWidth(0);
+		mPaint.setColor(Color.WHITE);
+		mPaint.setStrokeWidth(0);
 
-		canvas.drawRect(0, 0, mWidth, mHeight, paint);
+		canvas.drawRect(0, 0, mWidth, mHeight, mPaint);
 		
 		int gameBoardHeight = gameBoard.length;
 		int gameBoardWidth = gameBoard[0].length;
@@ -36,26 +37,26 @@ public class ImageGeneratorSimple extends ImageGenerator {
 			for (int c = 0; c < gameBoardWidth; c++) {
 				switch (gameBoard[r][c]) {
 				case Game.COLOR_BLACK:
-					paint.setColor(Color.BLACK);
+					mPaint.setColor(Color.BLACK);
 					break;
 				case Game.COLOR_RED:
-					paint.setColor(Color.RED);
+					mPaint.setColor(Color.RED);
 					break;
 				case Game.COLOR_GREEN:
-					paint.setColor(Color.GREEN);
+					mPaint.setColor(Color.GREEN);
 					break;
 				case Game.COLOR_YELLOW:
-					paint.setColor(Color.YELLOW);
+					mPaint.setColor(Color.YELLOW);
 					break;
 				case Game.COLOR_BLUE:
-					paint.setColor(Color.BLUE);
+					mPaint.setColor(Color.BLUE);
 					break;
 				default:
-					paint.setColor(Color.BLACK);
+					mPaint.setColor(Color.BLACK);
 					break;
 				}
 				canvas.drawRect(c * cellWidth + 1, r * cellHeight + 1, (c + 1)
-						* cellWidth - 1, (r + 1) * cellHeight - 1, paint);
+						* cellWidth - 1, (r + 1) * cellHeight - 1, mPaint);
 			}
 		}
 
