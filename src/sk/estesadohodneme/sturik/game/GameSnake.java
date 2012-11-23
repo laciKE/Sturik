@@ -4,17 +4,16 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import android.util.Log;
-
 public class GameSnake extends Game {
 
 	public static final int BOARD_WIDTH = 15;
 	public static final int BOARD_HEIGHT= 13;
-	public static final int BOARD_EMPTY = 0;
-	public static final int BOARD_SNAKE = 1;
-	public static final int BOARD_HEAD  = 2;
-	public static final int BOARD_FOOD  = 3;
-	public static final int BOARD_SCORE = 4;
+	public static final short BOARD_EMPTY = Game.COLOR_BLACK;
+	public static final short BOARD_SNAKE = Game.COLOR_GREEN;
+	public static final short BOARD_HEAD  = Game.COLOR_YELLOW;
+	public static final short BOARD_FOOD  = Game.COLOR_RED;
+	public static final short BOARD_SCORE = Game.COLOR_BLUE;
+	public static final short BOARD_ROUND = Game.COLOR_RED;
 	public static final int SNAKE_LIFES = 10;
 	public static final int SCORE_DURATION = 5;
 	
@@ -23,8 +22,10 @@ public class GameSnake extends Game {
 	protected Random mRandom = new Random();
 	
 	protected int mShowScore;
+	protected int mShowRound;
 	protected int mSnakeHead;
 	protected int mSnakeStock;
+	protected int mSnakeScore;
 	protected int mSnakeVX,mSnakeVY;
 	protected int mKilledSnakes;
 	protected boolean mIsFinished;
@@ -32,113 +33,9 @@ public class GameSnake extends Game {
 	public boolean isFinished() {
 		return mIsFinished;
 	}
+	
 	public int getDefaultDelay() {
 		return 200;
-	}
-	
-	protected short[][] digitBitmap() {
-		short k = BOARD_SCORE;
-		if (mKilledSnakes == 1) {
-			short bitmap[][] = {
-				      { 0, k, 0 },
-				      { 0, k, 0 },
-				      { 0, k, 0 },
-				      { 0, k, 0 },
-				      { 0, k, 0 }
-				    };
-			return bitmap;
-		}
-		if (mKilledSnakes == 2) {
-			short bitmap[][] = {
-				      { k, k, k },
-				      { 0, 0, k },
-				      { k, k, k },
-				      { k, 0, 0 },
-				      { k, k, k }
-				    };
-			return bitmap;
-		}
-		if (mKilledSnakes == 3) {
-			short bitmap[][] = {
-				      { k, k, k },
-				      { 0, 0, k },
-				      { k, k, k },
-				      { 0, 0, k },
-				      { k, k, k }
-				    };
-			return bitmap;
-		}
-		if (mKilledSnakes == 4) {
-			short bitmap[][] = {
-				      { k, 0, 0 },
-				      { k, 0, 0 },
-				      { k, k, k },
-				      { 0, k, 0 },
-				      { 0, k, 0 }
-				    };
-			return bitmap;
-		}
-		if (mKilledSnakes == 5) {
-			short bitmap[][] = {
-				      { k, k, k },
-				      { k, 0, 0 },
-				      { k, k, k },
-				      { 0, 0, k },
-				      { k, k, k }
-				    };
-			return bitmap;
-		}
-		if (mKilledSnakes == 6) {
-			short bitmap[][] = {
-				      { k, k, k },
-				      { k, 0, 0 },
-				      { k, k, k },
-				      { k, 0, k },
-				      { k, k, k }
-				    };
-			return bitmap;
-		}
-		if (mKilledSnakes == 7) {
-			short bitmap[][] = {
-				      { k, k, k },
-				      { 0, 0, k },
-				      { 0, 0, k },
-				      { 0, 0, k },
-				      { 0, 0, k }
-				    };
-			return bitmap;
-		}
-		if (mKilledSnakes == 8) {
-			short bitmap[][] = {
-				      { k, k, k },
-				      { k, 0, k },
-				      { k, k, k },
-				      { k, 0, k },
-				      { k, k, k }
-				    };
-			return bitmap;
-		}
-		if (mKilledSnakes == 9) {
-			short bitmap[][] = {
-				      { k, k, k },
-				      { k, 0, k },
-				      { k, k, k },
-				      { 0, 0, k },
-				      { k, k, k }
-				    };
-			return bitmap;
-		}
-		return null;
-	}
-	
-	protected void showScore() {
-		int sx = BOARD_WIDTH/2 - 1;
-		int sy = BOARD_HEIGHT/2 - 3;
-		
-		short[][] bitmap = digitBitmap();
-		for(int i=0;i<5;i++)
-		for(int j=0;j<3;j++)
-			mBoard[i+sy][j+sx] = bitmap[i][j];
 	}
 	
 	protected boolean isEmpty(int i) {
@@ -180,6 +77,7 @@ public class GameSnake extends Game {
 		mSnakeVX = 0;
 		mSnakeVY = 0;
 		
+		mSnakeScore = 0;
 		mSnakeStock = 2;
 	}
 
@@ -219,18 +117,35 @@ public class GameSnake extends Game {
 		}
 	}
 	
+	protected void showScore() {
+		mShowScore--;
+		if (mShowScore == 0) {
+			clearBoard();
+			mShowRound = SCORE_DURATION;
+		}
+		else
+			mBoard = DigitDrawer.showNumberAtBoard(mSnakeScore,BOARD_SCORE,mBoard);
+	}
+	
+	protected void showRound() {
+		mShowRound--;
+		if (mShowRound == 0) {
+			clearBoard();
+			newSnake();
+			boardAddFood();
+		}
+		else
+			mBoard = DigitDrawer.showNumberAtBoard(mKilledSnakes,BOARD_ROUND,mBoard);
+	}
+	
 	@Override
 	public short[][] doStep(UserAction userAction) {
 		if (mShowScore > 0) { 
-			mShowScore--;
-			if (mShowScore == 0) {
-				clearBoard();
-				newSnake();
-				boardAddFood();
-			}
-			else
-				showScore();
-			
+			showScore();
+			return mBoard;
+		}
+		if (mShowRound > 0) {
+			showRound();
 			return mBoard;
 		}
 		
@@ -249,10 +164,11 @@ public class GameSnake extends Game {
 			return mBoard;
 		}
 		
-		boolean noFood = false;
+		boolean noFoodAtBoard = false;
 		if (mBoard[newY][newX] == BOARD_FOOD) {
 			mSnakeStock+=3;
-			noFood = true;
+			noFoodAtBoard = true;
+			mSnakeScore++;
 		}
 		else if (mBoard[newY][newX] != BOARD_EMPTY) {
 			killSnake();
@@ -270,7 +186,7 @@ public class GameSnake extends Game {
 		mSnakeHead = newY*BOARD_WIDTH + newX;
 		mSnake.add(mSnakeHead);
 		mBoard[newY][newX] = BOARD_HEAD;
-		if (noFood) boardAddFood();
+		if (noFoodAtBoard) boardAddFood();
 		
 		return mBoard;
 	}

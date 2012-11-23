@@ -2,15 +2,17 @@ package sk.estesadohodneme.sturik.game;
 
 import java.util.Random;
 
+import android.util.Log;
+
 public class GameTetris extends Game {
 
 	public static final int BOARD_WIDTH = 15;
 	public static final int BOARD_HEIGHT= 13;
-	public static final short BOARD_EMPTY = 0;
-	public static final short BOARD_PIECE = 2;
-	public static final short BOARD_PILE = 1;
+	public static final short BOARD_EMPTY = Game.COLOR_BLACK;
+	public static final short BOARD_PIECE = Game.COLOR_YELLOW;
+	public static final short BOARD_PILE  = Game.COLOR_GREEN;
 	
-	public static final int DESCENT_TIME = 5;
+	public static final int DESCENT_TIME = 3;
 	
 	protected short[][] mBoard = new short[BOARD_HEIGHT][BOARD_WIDTH];
 	protected Random mRandom = new Random();
@@ -23,9 +25,8 @@ public class GameTetris extends Game {
 		return mIsFinished;
 	}
 	public int getDefaultDelay() {
-		return 200;
+		return 150;
 	}
-	
 	
 	public static final short[][][][] mPieces =  //kind X rotation X 2D bitmap 
 	{
@@ -251,27 +252,27 @@ public class GameTetris extends Game {
 	public static final short[][]   mPiecesInitialPosition =
 		{
 		/* Square */
-		  { -3,-3,-3,-3 },
+		  { -2,-2,-2,-2 },
 		/* I */
-		  { -2,-3,-2,-3 },
+		  { -2,-1,-2,-0 },
 		/* L */
-		  { -3,-3,-3,-2 },
+		  { -1,-2,-1,-1 },
 		/* L mirrored */
-		  { -3,-2,-3,-3 },
+		  { -1,-1,-1,-2 },
 		/* N */
-		  { -3,-3,-3,-2 },
+		  { -1,-2,-1,-1 },
 		/* N mirrored */
-		  { -3,-3,-3,-2 },
+		  { -1,-2,-1,-1 },
 		/* T */
-		  { -3,-3,-3,-2 },
+		  { -1,-2,-1,-1 },
 		};
 	
 	protected void deleteLine(int y) {
 	    for (int i=y;i>0;i--)
 	    for (int j=0;j<BOARD_WIDTH;j++)
-	    	mBoard[j][i] = mBoard[j][i-1];
+	    	mBoard[i][j] = mBoard[i-1][j];
 	}
-	protected void findAndDeleteFullLines () {
+	protected void findAndDeleteFullLines() {
 	    for(int i=0;i<BOARD_HEIGHT;i++) {
 	    	int j=0;
 	    	for(;j<BOARD_WIDTH;j++)
@@ -283,16 +284,20 @@ public class GameTetris extends Game {
 	}
 	
 	protected boolean isMoveAllowed(int type,int rot,int x,int y) {
+		Log.d("TERIS ALLOWED",type+" "+rot+" "+x+" "+y);
 		for(int i=0;i<5;i++)
 		for(int j=0;j<5;j++) {
+			
 			if (mPieces[type][rot][i][j]>0) {
 				//is it still on the board?
+				Log.d("TERIS",i+" "+j+" ");
 				if ((i+y<0)||(i+y>=BOARD_HEIGHT)||(j+x<0)||(j+x>=BOARD_WIDTH))
 					return false;
-				
+				Log.d("TERIS","2");
 				//is the position free?
 				if (mBoard[i+y][j+x] == BOARD_PILE)
 					return false;
+				Log.d("TERIS","3");
 			}
 		}
 	    return true;
@@ -330,6 +335,7 @@ public class GameTetris extends Game {
 		mPieceY        = mPiecesInitialPosition[mPieceType][mPieceRotation];
 		
 		mDescentTime = 0;
+		Log.d("TERIS",isMoveAllowed(mPieceType,mPieceRotation,mPieceX,mPieceY)+" "+mPieceType+" "+mPieceRotation+" "+mPieceX+" "+mPieceY);
 		if (isMoveAllowed(mPieceType,mPieceRotation,mPieceX,mPieceY))
 			storePiece(BOARD_PIECE);
 		else 
@@ -338,12 +344,13 @@ public class GameTetris extends Game {
 	
 	public GameTetris() {
 		newPiece();
-		
+		mIsFinished = false;
 		clearBoard();
 	}
 	
 	@Override
 	public short[][] doStep(UserAction userAction) {
+		
 		mDescentTime = (mDescentTime + 1) % DESCENT_TIME;
 		int dx=0,dy=0,dr=0;
 		if (userAction.isActionDown()) dr = 3;
@@ -362,18 +369,18 @@ public class GameTetris extends Game {
 		}
 		
 		if(dy>0) {
-			clearPiece();
 			if (isMoveAllowed(mPieceType,mPieceRotation,mPieceX,mPieceY+dy)) {
+				clearPiece();
 				mPieceY += dy;
 				storePiece(BOARD_PIECE);
 			}
 			else {
 				storePiece(BOARD_PILE);
+				findAndDeleteFullLines();
 				newPiece();
 			}
 		}
 		
 		return mBoard;
 	}
-
 }
