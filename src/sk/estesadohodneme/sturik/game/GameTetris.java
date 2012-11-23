@@ -8,11 +8,11 @@ public class GameTetris extends Game {
 
 	public static final int BOARD_WIDTH = 15;
 	public static final int BOARD_HEIGHT= 13;
-	public static final short BOARD_EMPTY = 0;
-	public static final short BOARD_PIECE = 2;
-	public static final short BOARD_PILE = 1;
+	public static final short BOARD_EMPTY = Game.COLOR_BLACK;
+	public static final short BOARD_PIECE = Game.COLOR_YELLOW;
+	public static final short BOARD_PILE  = Game.COLOR_GREEN;
 	
-	public static final int DESCENT_TIME = 1;
+	public static final int DESCENT_TIME = 3;
 	
 	protected short[][] mBoard = new short[BOARD_HEIGHT][BOARD_WIDTH];
 	protected Random mRandom = new Random();
@@ -25,9 +25,8 @@ public class GameTetris extends Game {
 		return mIsFinished;
 	}
 	public int getDefaultDelay() {
-		return 100;
+		return 150;
 	}
-	
 	
 	public static final short[][][][] mPieces =  //kind X rotation X 2D bitmap 
 	{
@@ -253,19 +252,19 @@ public class GameTetris extends Game {
 	public static final short[][]   mPiecesInitialPosition =
 		{
 		/* Square */
-		  { -3,-3,-3,-3 },
+		  { -2,-2,-2,-2 },
 		/* I */
-		  { -3,-2,-3,-1 },
+		  { -2,-1,-2,-0 },
 		/* L */
-		  { -2,-3,-2,-2 },
+		  { -1,-2,-1,-1 },
 		/* L mirrored */
-		  { -2,-2,-2,-3 },
+		  { -1,-1,-1,-2 },
 		/* N */
-		  { -2,-3,-2,-2 },
+		  { -1,-2,-1,-1 },
 		/* N mirrored */
-		  { -2,-3,-2,-2 },
+		  { -1,-2,-1,-1 },
 		/* T */
-		  { -2,-2,-3,-2 },
+		  { -1,-2,-1,-1 },
 		};
 	
 	protected void deleteLine(int y) {
@@ -285,16 +284,20 @@ public class GameTetris extends Game {
 	}
 	
 	protected boolean isMoveAllowed(int type,int rot,int x,int y) {
+		Log.d("TERIS ALLOWED",type+" "+rot+" "+x+" "+y);
 		for(int i=0;i<5;i++)
 		for(int j=0;j<5;j++) {
+			
 			if (mPieces[type][rot][i][j]>0) {
 				//is it still on the board?
+				Log.d("TERIS",i+" "+j+" ");
 				if ((i+y<0)||(i+y>=BOARD_HEIGHT)||(j+x<0)||(j+x>=BOARD_WIDTH))
 					return false;
-				
+				Log.d("TERIS","2");
 				//is the position free?
 				if (mBoard[i+y][j+x] == BOARD_PILE)
 					return false;
+				Log.d("TERIS","3");
 			}
 		}
 	    return true;
@@ -332,6 +335,7 @@ public class GameTetris extends Game {
 		mPieceY        = mPiecesInitialPosition[mPieceType][mPieceRotation];
 		
 		mDescentTime = 0;
+		Log.d("TERIS",isMoveAllowed(mPieceType,mPieceRotation,mPieceX,mPieceY)+" "+mPieceType+" "+mPieceRotation+" "+mPieceX+" "+mPieceY);
 		if (isMoveAllowed(mPieceType,mPieceRotation,mPieceX,mPieceY))
 			storePiece(BOARD_PIECE);
 		else 
@@ -340,7 +344,7 @@ public class GameTetris extends Game {
 	
 	public GameTetris() {
 		newPiece();
-		
+		mIsFinished = false;
 		clearBoard();
 	}
 	
