@@ -51,7 +51,8 @@ public class GameFragment extends Fragment implements
 		int[][] actions = { { R.id.button_left, GameEngine.ACTION_LEFT },
 				{ R.id.button_right, GameEngine.ACTION_RIGHT },
 				{ R.id.button_down, GameEngine.ACTION_DOWN },
-				{ R.id.button_up, GameEngine.ACTION_UP }, };
+				{ R.id.button_up, GameEngine.ACTION_UP },
+				{R.id.button_fire, GameEngine.ACTION_FIRE}};
 		for (int[] action : actions) {
 			int buttonId = action[0];
 			final int userAction = action[1];

@@ -55,6 +55,16 @@
             android:contentDescription="@string/up"
             android:scaleType="fitXY"
             android:src="@drawable/arrow_up" />
+
+        <ImageButton
+            android:id="@+id/button_fire"
+            android:layout_width="@dimen/gamepad_button_size"
+            android:layout_height="@dimen/gamepad_button_size"
+            android:layout_centerInParent="true"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/up"
+            android:scaleType="fitXY"
+            android:src="@drawable/gamepad_center" />
     </RelativeLayout>
 
 </RelativeLayout>

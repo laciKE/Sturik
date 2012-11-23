@@ -12,6 +12,7 @@ public class UserAction {
 	public static final byte ACTION_RIGHT = 2;
 	public static final byte ACTION_DOWN = 4;
 	public static final byte ACTION_UP = 8;
+	public static final byte ACTION_FIRE = 16;
 
 	protected byte mAction = ACTION_UNDEFINED;
 
@@ -59,6 +60,13 @@ public class UserAction {
 	 */
 	public boolean isActionDown() {
 		return ((mAction & ACTION_DOWN) > 0) ? true : false;
+	}
+
+	/**
+	 * @return true if ACTION_FIRE has been set, false otherwise.
+	 */
+	public boolean isActionFire() {
+		return ((mAction & ACTION_FIRE) > 0) ? true : false;
 	}
 
 }

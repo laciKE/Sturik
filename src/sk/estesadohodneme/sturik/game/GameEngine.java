@@ -26,6 +26,7 @@ public class GameEngine implements Runnable, Serializable {
 	public static final int ACTION_RIGHT = 2;
 	public static final int ACTION_DOWN = 3;
 	public static final int ACTION_UP = 4;
+	public static final int ACTION_FIRE = 5;
 
 	/**
 	 * Type of game constants.
