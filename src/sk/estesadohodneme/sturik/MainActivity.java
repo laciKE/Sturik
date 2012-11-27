@@ -27,14 +27,20 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		// Set window fullscreen, remove title bar and force landscape orientation
-	    this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-	    getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-	    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-	    
+
+		// Set window fullscreen, remove title bar and force landscape
+		// orientation
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
 		setContentView(R.layout.activity_main);
 
+		/*
+		 * sets global application resources for share with various classes
+		 */
+		ApplicationResources.setResources(getResources());
 		mGameEngine = new GameEngine();
 
 		Fragment fragment = new WelcomeFragment();
@@ -42,7 +48,6 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
 				.beginTransaction();
 		fragmentTransaction.replace(R.id.frame, fragment);
 		fragmentTransaction.commit();
-
 	}
 
 	/*
@@ -65,18 +70,18 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
 			mGameEngine.setGame(GameEngine.GAME_SNAKE);
 			mGameEngine.setImageGenerator(GameEngine.IMAGE_GENERATOR_SIMPLE);
 			break;
-		// case R.id.button_snake_mlyny:
-		// mGameEngine.setGame(GameEngine.GAME_SNAKE);
-		// mGameEngine.setImageGenerator(GameEngine.IMAGE_GENERATOR_MLYNY);
-		// break;
+		case R.id.button_snake_mlyny:
+			mGameEngine.setGame(GameEngine.GAME_SNAKE);
+			mGameEngine.setImageGenerator(GameEngine.IMAGE_GENERATOR_MLYNY);
+			break;
 		case R.id.button_tetris:
 			mGameEngine.setGame(GameEngine.GAME_TETRIS);
 			mGameEngine.setImageGenerator(GameEngine.IMAGE_GENERATOR_SIMPLE);
 			break;
-		// case R.id.button_tetris_mlyny:
-		// mGameEngine.setGame(GameEngine.GAME_TETRIS);
-		// mGameEngine.setImageGenerator(GameEngine.IMAGE_GENERATOR_MLYNY);
-		// break;
+		case R.id.button_tetris_mlyny:
+			mGameEngine.setGame(GameEngine.GAME_TETRIS);
+			mGameEngine.setImageGenerator(GameEngine.IMAGE_GENERATOR_MLYNY);
+			break;
 		default:
 			Toast.makeText(this, R.string.unimplemented_game,
 					Toast.LENGTH_SHORT).show();
