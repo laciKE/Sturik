@@ -67,7 +67,7 @@ public class GameFragment extends Fragment implements
 			});
 			
 			// set button press feedback based on transparency
-			button.setAlpha(192);
+			button.setAlpha(128);
 			button.setOnTouchListener(new OnTouchListener() {
 				
 				// @Override
@@ -77,7 +77,7 @@ public class GameFragment extends Fragment implements
 						imageButton.setAlpha(255);
 					}
 					if(event.getAction() == MotionEvent.ACTION_UP){
-						imageButton.setAlpha(192);
+						imageButton.setAlpha(128);
 					}
 					return false;
 				}
