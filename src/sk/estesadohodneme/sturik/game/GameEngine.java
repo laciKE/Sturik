@@ -129,7 +129,7 @@ public class GameEngine implements Runnable, Serializable {
 				mImageGenerator = new ImageGeneratorSimple();
 				break;
 			case IMAGE_GENERATOR_MLYNY:
-				// mImageGenerator = new ImageGeneratorMlyny();
+				mImageGenerator = new ImageGeneratorMlyny();
 				break;
 			default:
 				mImageGenerator = null;
