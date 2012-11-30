@@ -179,7 +179,7 @@ public class GameEngine implements Runnable, Serializable {
 	 * 
 	 * @param userAction
 	 *            should be one of ACTION_LEFT, ACTION_RIGHT, ACTION_UP,
-	 *            ACTION_DOWN
+	 *            ACTION_DOWN, ACTION_FIRE
 	 */
 	public void setUserAction(int userAction) {
 		mUserActionLock.lock();
@@ -196,6 +196,9 @@ public class GameEngine implements Runnable, Serializable {
 				break;
 			case ACTION_UP:
 				mUserAction.setAction(UserAction.ACTION_UP);
+				break;
+			case ACTION_FIRE:
+				mUserAction.setAction(UserAction.ACTION_FIRE);
 				break;
 			default:
 				mUserAction.setAction(UserAction.ACTION_UNDEFINED);
@@ -300,6 +303,8 @@ public class GameEngine implements Runnable, Serializable {
 //					Log.d("STURIK", "up");
 //				if (mUserAction.isActionDown())
 //					Log.d("STURIK", "down");
+//				if (mUserAction.isActionFire())
+//					Log.d("STURIK", "fire");
 				rawGameBoard = mGame.doStep(mUserAction);
 				isFinished = mGame.isFinished();
 //				Log.d("STURIK","finished "+isFinished);

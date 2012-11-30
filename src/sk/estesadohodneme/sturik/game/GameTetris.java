@@ -284,23 +284,28 @@ public class GameTetris extends Game {
 	}
 	
 	protected boolean isMoveAllowed(int type,int rot,int x,int y) {
-		Log.d("TERIS ALLOWED",type+" "+rot+" "+x+" "+y);
 		for(int i=0;i<5;i++)
 		for(int j=0;j<5;j++) {
 			
 			if (mPieces[type][rot][i][j]>0) {
 				//is it still on the board?
-				Log.d("TERIS",i+" "+j+" ");
 				if ((i+y<0)||(i+y>=BOARD_HEIGHT)||(j+x<0)||(j+x>=BOARD_WIDTH))
 					return false;
-				Log.d("TERIS","2");
 				//is the position free?
 				if (mBoard[i+y][j+x] == BOARD_PILE)
 					return false;
-				Log.d("TERIS","3");
 			}
 		}
 	    return true;
+	}
+	
+	protected void letPieceDown() {
+		Log.d("TETRIS","before"+mPieceY);
+		while (isMoveAllowed(mPieceType,mPieceRotation,mPieceX,mPieceY+1)) 
+			mPieceY ++;
+		Log.d("TETRIS","after"+mPieceY);
+		clearPiece();
+		storePiece(BOARD_PIECE);
 	}
 	
 	protected void clearBoard() {
@@ -353,6 +358,8 @@ public class GameTetris extends Game {
 		
 		mDescentTime = (mDescentTime + 1) % DESCENT_TIME;
 		int dx=0,dy=0,dr=0;
+		if (userAction.isActionFire()) Log.d("TETRIS","FIREEEE");
+		if (userAction.isActionFire()) letPieceDown();
 		if (userAction.isActionDown()) dr = 3;
 		if (userAction.isActionUp())   dr = 1;
 		if (userAction.isActionLeft()) dx =-1;

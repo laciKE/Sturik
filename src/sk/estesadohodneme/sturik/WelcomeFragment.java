@@ -37,7 +37,6 @@ public class WelcomeFragment extends Fragment {
 			button.setAlpha(192);
 			button.setOnTouchListener(new OnTouchListener() {
 				
-				@Override
 				public boolean onTouch(View v, MotionEvent event) {
 					ImageButton imageButton = (ImageButton) v;
 					if(event.getAction() == MotionEvent.ACTION_DOWN){

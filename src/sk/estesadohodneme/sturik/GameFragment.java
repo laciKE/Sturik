@@ -52,7 +52,7 @@ public class GameFragment extends Fragment implements
 				{ R.id.button_right, GameEngine.ACTION_RIGHT },
 				{ R.id.button_down, GameEngine.ACTION_DOWN },
 				{ R.id.button_up, GameEngine.ACTION_UP },
-				{R.id.button_fire, GameEngine.ACTION_FIRE}};
+				{ R.id.button_fire, GameEngine.ACTION_FIRE}};
 		for (int[] action : actions) {
 			int buttonId = action[0];
 			final int userAction = action[1];
@@ -67,7 +67,7 @@ public class GameFragment extends Fragment implements
 			});
 			
 			// set button press feedback based on transparency
-			button.setAlpha(128);
+			button.setAlpha(64);
 			button.setOnTouchListener(new OnTouchListener() {
 				
 				// @Override
@@ -77,7 +77,7 @@ public class GameFragment extends Fragment implements
 						imageButton.setAlpha(255);
 					}
 					if(event.getAction() == MotionEvent.ACTION_UP){
-						imageButton.setAlpha(128);
+						imageButton.setAlpha(64);
 					}
 					return false;
 				}
